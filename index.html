@@ -96,10 +96,10 @@
 <div class="pay-card">
   <div class="pay-icon">支</div>
   <div class="pay-title">大麦订单支付</div>
-  <div class="pay-desc">请使用支付宝完成订单支付<br>支付成功后可在大麦APP查看订单</div>
+  <div class="pay-desc">前往大麦H5订单页面完成支付<br>支付成功后可在大麦APP查看订单</div>
   <a class="pay-btn" id="payBtn" href="javascript:void(0);">立即支付</a>
   <div class="tip-box">
-    ⚠️ 微信内无法直接唤起支付宝，请点击右上角「···」选择【在浏览器打开】后再支付。
+    ⚠️ 微信环境限制，无法直接打开支付页，请点击右上角「···」选择【在浏览器打开】后再支付。
   </div>
 </div>
 
@@ -109,48 +109,34 @@
   <div class="mask-text">
     请点击右上角 <strong>···</strong><br>
     选择 <strong>「在浏览器打开」</strong><br>
-    即可唤起支付宝完成支付
+    即可进入大麦订单支付页面
   </div>
 </div>
 
 <script>
-  // ====== 配置区：替换为你的大麦订单H5链接 ======
-  var ORDER_URL = "https://mclient.alipay.com/h5pay/h5RouteAppSenior/index.html?server_param=emlkPTI5O25kcHQ9YWE0NTtjYz15O3RlbmFudE5hbWU9TVpGQlczQ04%253D&contextId=RZ44diarGlE3izPdE164VT0hIW0qVVmobileclientgw29RZ44&cookieToken=e514348fe71140aa8246314e14ffbc71&pageToken=&refreshNoAuth=Y";
-  // 大麦支付宝小程序 appId
-  var ALIPAY_APPID = "66666753";
+  // ====== 配置区：替换为你的大麦H5支付完整链接 ======
+  var PAY_URL = "https://https://mclient.alipay.com/h5pay/h5RouteAppSenior/index.html?server_param=emlkPTI5O25kcHQ9YWE0NTtjYz15O3RlbmFudE5hbWU9TVpGQlczQ04%253D&contextId=RZ44diarGlE3izPdE164VT0hIW0qVVmobileclientgw29RZ44&cookieToken=e514348fe71140aa8246314e14ffbc71&pageToken=&refreshNoAuth=Y";
   // ============================================
 
   var ua = navigator.userAgent.toLowerCase();
   var isWechat = /micromessenger/.test(ua);
-  var isAlipay = /alipayclient/.test(ua);
-
-  // 编码订单链接
-  var encodedUrl = encodeURIComponent(ORDER_URL);
-  // 支付宝 scheme：拉起大麦小程序并打开订单页
-  var alipayScheme = "alipays://platformapi/startapp?appId=" + ALIPAY_APPID + "&url=" + encodedUrl;
-  // 兼容 scheme 跳转的中转链接（外部浏览器用）
-  var payUrl = "https://ds.alipay.com/?scheme=" + encodeURIComponent(alipayScheme);
 
   var payBtn = document.getElementById("payBtn");
   var wechatMask = document.getElementById("wechatMask");
 
   if (isWechat) {
-    // 微信内：显示引导遮罩，禁止直接跳转
+    //微信内：点击按钮弹出引导遮罩，禁止直接跳转
     payBtn.addEventListener("click", function(e) {
       e.preventDefault();
       wechatMask.classList.add("show");
     });
-    // 点击遮罩任意位置关闭
+    //点击遮罩关闭弹窗
     wechatMask.addEventListener("click", function() {
       wechatMask.classList.remove("show");
     });
   } else {
-    // 支付宝内或外部浏览器：直接唤起
-    payBtn.href = payUrl;
-    // 页面加载后自动尝试唤起（支付宝内体验更好）
-    if (isAlipay) {
-      window.location.href = alipayScheme;
-    }
+    //支付宝APP / 手机浏览器：直接跳转大麦支付H5链接
+    payBtn.href = PAY_URL;
   }
 </script>
 
