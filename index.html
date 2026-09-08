@@ -1,133 +1,133 @@
-!DOCTYPE html
-html lang=zh-CN
-head
-meta charset=UTF-8
-meta name=viewport content=width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no
-title大麦订单支付title
-style
-   { margin 0; padding 0; box-sizing border-box; -webkit-tap-highlight-color transparent; }
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>大麦订单支付</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
   body {
-    font-family -apple-system, BlinkMacSystemFont, PingFang SC, Helvetica Neue, sans-serif;
-    background #f5f5f7;
-    min-height 100vh;
-    padding 20px;
+    font-family: -apple-system, BlinkMacSystemFont, "PingFang SC", "Helvetica Neue", sans-serif;
+    background: #f5f5f7;
+    min-height: 100vh;
+    padding: 20px;
   }
   .pay-card {
-    width 100%;
-    max-width 420px;
-    background #fff;
-    border-radius 16px;
-    padding 32px 24px;
-    text-align center;
-    box-shadow 0 4px 20px rgba(0,0,0,0.06);
+    width: 100%;
+    max-width: 420px;
+    background: #fff;
+    border-radius: 16px;
+    padding: 32px 24px;
+    text-align: center;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.06);
   }
   .pay-icon {
-    width 64px; height 64px;
-    background linear-gradient(135deg, #1677FF, #00A0E9);
-    border-radius 16px;
-    margin 0 auto 20px;
-    display flex; align-items center; justify-content center;
-    color #fff; font-size 28px; font-weight bold;
+    width: 64px; height: 64px;
+    background: linear-gradient(135deg, #1677FF, #00A0E9);
+    border-radius: 16px;
+    margin: 0 auto 20px;
+    display: flex; align-items: center; justify-content: center;
+    color: #fff; font-size: 28px; font-weight: bold;
   }
-  .pay-title { font-size 20px; font-weight 600; color #1a1a1a; margin-bottom 8px; }
-  .pay-desc { font-size 14px; color #888; line-height 1.6; margin-bottom 20px; }
+  .pay-title { font-size: 20px; font-weight: 600; color: #1a1a1a; margin-bottom: 8px; }
+  .pay-desc { font-size: 14px; color: #888; line-height: 1.6; margin-bottom: 20px; }
   .copy-btn {
-    display block;
-    width 100%;
-    height 48px;
-    line-height 48px;
-    background #1677FF;
-    color #fff;
-    font-size 16px;
-    font-weight 500;
-    border none;
-    border-radius 24px;
-    cursor pointer;
-    margin-bottom16px;
+    display: block;
+    width: 100%;
+    height: 48px;
+    line-height: 48px;
+    background: #1677FF;
+    color: #fff;
+    font-size: 16px;
+    font-weight: 500;
+    border: none;
+    border-radius: 24px;
+    cursor: pointer;
+    margin-bottom:16px;
   }
-  .copy-btnactive { opacity 0.85; }
+  .copy-btn:active { opacity: 0.85; }
   .tip-box {
-    padding 12px 14px;
-    background #FFF7E6;
-    border-radius 8px;
-    font-size 14px;
-    color #D48806;
-    line-height 1.7;
-    text-align left;
+    padding: 12px 14px;
+    background: #FFF7E6;
+    border-radius: 8px;
+    font-size: 14px;
+    color: #D48806;
+    line-height: 1.7;
+    text-align: left;
   }
   .link-text{
-    margin-top16px;
-    word-break break-all;
-    font-size12px;
-    color#666;
-    background#f4f4f4;
-    padding10px;
-    border-radius6px;
+    margin-top:16px;
+    word-break: break-all;
+    font-size:12px;
+    color:#666;
+    background:#f4f4f4;
+    padding:10px;
+    border-radius:6px;
   }
   .success-toast{
-    positionfixed;
-    top30%;
-    left50%;
-    transformtranslateX(-50%);
-    backgroundrgba(0,0,0,0.7);
-    color#fff;
-    padding8px 16px;
-    border-radius8px;
-    displaynone;
+    position:fixed;
+    top:30%;
+    left:50%;
+    transform:translateX(-50%);
+    background:rgba(0,0,0,0.7);
+    color:#fff;
+    padding:8px 16px;
+    border-radius:8px;
+    display:none;
   }
-style
-head
-body
+</style>
+</head>
+<body>
 
-div class=pay-card
-  div class=pay-icon支div
-  div class=pay-title大麦订单支付div
-  div class=pay-desc
-    微信、支付宝内无法直接拉起支付br
+<div class="pay-card">
+  <div class="pay-icon">支</div>
+  <div class="pay-title">大麦订单支付</div>
+  <div class="pay-desc">
+    微信、支付宝内无法直接拉起支付<br>
     请复制链接，在手机自带浏览器打开
-  div
-  button class=copy-btn id=copyBtn复制支付链接button
-  div class=tip-box
-    ✅操作步骤：br
-    1.点击复制支付链接br
-    2.打开手机自带浏览器（华为小米Safari等）br
+  </div>
+  <button class="copy-btn" id="copyBtn">复制支付链接</button>
+  <div class="tip-box">
+    ✅操作步骤：<br>
+    1.点击复制支付链接<br>
+    2.打开手机自带浏览器（华为/小米/Safari等）<br>
     3.粘贴链接访问，完成订单支付
-  div
-  div class=link-text id=payLinkText
-    https你的大麦H5订单支付链接
-  div
-div
-div class=success-toast id=toast链接已复制div
+  </div>
+  <div class="link-text" id="payLinkText">
+    https://https://mclient.alipay.com/h5pay/h5RouteAppSenior/index.html?server_param=emlkPTc5O25kcHQ9NTFhNTtjYz15O3RlbmFudE5hbWU9TVpGQlczQ04%253D&contextId=RZ55GEeqiKm8hDFkattu8ZMVaKniXWmobileclientgw79RZ55&cookieToken=6eea9ea8b79d4deda9e92dd8440eeea9&pageToken=&refreshNoAuth=Y
+  </div>
+</div>
+<div class="success-toast" id="toast">链接已复制</div>
 
-script
-   ====== 配置区：替换大麦H5支付链接 ======
-  var PAY_URL = https://mclient.alipay.com/h5pay/h5RouteAppSenior/index.html?server_param=emlkPTc5O25kcHQ9NTFhNTtjYz15O3RlbmFudE5hbWU9TVpGQlczQ04%253D&contextId=RZ55GEeqiKm8hDFkattu8ZMVaKniXWmobileclientgw79RZ55&cookieToken=6eea9ea8b79d4deda9e92dd8440eeea9&pageToken=&refreshNoAuth=Y;
-   ========================================
+<script>
+  // ====== 配置区：替换大麦H5支付链接 ======
+  var PAY_URL = "https://mclient.alipay.com/h5pay/h5RouteAppSenior/index.html?server_param=emlkPTc5O25kcHQ9NTFhNTtjYz15O3RlbmFudE5hbWU9TVpGQlczQ04%253D&contextId=RZ55GEeqiKm8hDFkattu8ZMVaKniXWmobileclientgw79RZ55&cookieToken=6eea9ea8b79d4deda9e92dd8440eeea9&pageToken=&refreshNoAuth=Y";
+  // ========================================
 
   var ua = navigator.userAgent.toLowerCase();
-  var isWechat = micromessenger.test(ua);
-  var isAlipay = alipayclient.test(ua);
-   判断是否原生浏览器
+  var isWechat = /micromessenger/.test(ua);
+  var isAlipay = /alipayclient/.test(ua);
+  // 判断是否原生浏览器
   var isNativeBrowser = !isWechat && !isAlipay;
 
   document.getElementById('payLinkText').innerText = PAY_URL;
-  var copyBtn = document.getElementById(copyBtn);
-  var toast = document.getElementById(toast);
+  var copyBtn = document.getElementById("copyBtn");
+  var toast = document.getElementById("toast");
 
-  复制链接函数
+  //复制链接函数
   function copyUrl(){
-    navigator.clipboard.writeText(PAY_URL).then(()={
-      toast.style.display=block;
-      setTimeout(()=toast.style.display=none,1500);
+    navigator.clipboard.writeText(PAY_URL).then(()=>{
+      toast.style.display="block";
+      setTimeout(()=>toast.style.display="none",1500);
     })
   }
   copyBtn.addEventListener('click',copyUrl);
 
-   只有原生手机浏览器才自动跳转
+  // 只有原生手机浏览器才自动跳转
   if(isNativeBrowser){
     window.location.href = PAY_URL;
   }
-script
+</script>
 
-body
-html
+</body>
+</html>
