@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>大麦订单 - 支付宝支付</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, "PingFang SC", "Helvetica Neue", sans-serif;
+    background: #f5f5f7;
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+  }
+  .pay-card {
+    width: 100%;
+    max-width: 420px;
+    background: #fff;
+    border-radius: 16px;
+    padding: 32px 24px;
+    text-align: center;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.06);
+  }
+  .pay-icon {
+    width: 64px; height: 64px;
+    background: linear-gradient(135deg, #1677FF, #00A0E9);
+    border-radius: 16px;
+    margin: 0 auto 20px;
+    display: flex; align-items: center; justify-content: center;
+    color: #fff; font-size: 28px; font-weight: bold;
+  }
+  .pay-title { font-size: 20px; font-weight: 600; color: #1a1a1a; margin-bottom: 8px; }
+  .pay-desc { font-size: 14px; color: #888; line-height: 1.6; margin-bottom: 28px; }
+  .pay-btn {
+    display: block;
+    width: 100%;
+    height: 48px;
+    line-height: 48px;
+    background: #1677FF;
+    color: #fff;
+    font-size: 16px;
+    font-weight: 500;
+    border: none;
+    border-radius: 24px;
+    text-decoration: none;
+    cursor: pointer;
+  }
+  .pay-btn:active { opacity: 0.85; }
+  .tip-box {
+    margin-top: 20px;
+    padding: 12px 14px;
+    background: #FFF7E6;
+    border-radius: 8px;
+    font-size: 12px;
+    color: #D48806;
+    line-height: 1.6;
+    text-align: left;
+  }
+  /* 微信遮罩 */
+  .wechat-mask {
+    display: none;
+    position: fixed; top: 0; left: 0; right: 0; bottom: 0;
+    background: rgba(0,0,0,0.75);
+    z-index: 9999;
+    padding: 20px;
+  }
+  .wechat-mask.show { display: block; }
+  .arrow {
+    position: absolute; top: 12px; right: 24px;
+    width: 60px; height: 80px;
+  }
+  .arrow::before {
+    content: "";
+    position: absolute; top: 0; right: 0;
+    width: 0; height: 0;
+    border-left: 18px solid transparent;
+    border-right: 18px solid transparent;
+    border-bottom: 30px solid #fff;
+    transform: rotate(30deg);
+  }
+  .mask-text {
+    margin-top: 100px;
+    color: #fff;
+    font-size: 16px;
+    line-height: 1.8;
+    text-align: center;
+  }
+  .mask-text strong { color: #FFD666; font-size: 18px; }
+</style>
+</head>
+<body>
+
+<div class="pay-card">
+  <div class="pay-icon">支</div>
+  <div class="pay-title">大麦订单支付</div>
+  <div class="pay-desc">请使用支付宝完成订单支付<br>支付成功后可在大麦APP查看订单</div>
+  <a class="pay-btn" id="payBtn" href="javascript:void(0);">立即支付</a>
+  <div class="tip-box">
+    ⚠️ 微信内无法直接唤起支付宝，请点击右上角「···」选择【在浏览器打开】后再支付。
+  </div>
+</div>
+
+<!-- 微信引导遮罩 -->
+<div class="wechat-mask" id="wechatMask">
+  <div class="arrow"></div>
+  <div class="mask-text">
+    请点击右上角 <strong>···</strong><br>
+    选择 <strong>「在浏览器打开」</strong><br>
+    即可唤起支付宝完成支付
+  </div>
+</div>
+
+<script>
+  // ====== 配置区：替换为你的大麦订单H5链接 ======
+  var ORDER_URL = "https://mclient.alipay.com/h5pay/h5RouteAppSenior/index.html?server_param=emlkPTI5O25kcHQ9YWE0NTtjYz15O3RlbmFudE5hbWU9TVpGQlczQ04%253D&contextId=RZ44diarGlE3izPdE164VT0hIW0qVVmobileclientgw29RZ44&cookieToken=e514348fe71140aa8246314e14ffbc71&pageToken=&refreshNoAuth=Y";
+  // 大麦支付宝小程序 appId
+  var ALIPAY_APPID = "66666753";
+  // ============================================
+
+  var ua = navigator.userAgent.toLowerCase();
+  var isWechat = /micromessenger/.test(ua);
+  var isAlipay = /alipayclient/.test(ua);
+
+  // 编码订单链接
+  var encodedUrl = encodeURIComponent(ORDER_URL);
+  // 支付宝 scheme：拉起大麦小程序并打开订单页
+  var alipayScheme = "alipays://platformapi/startapp?appId=" + ALIPAY_APPID + "&url=" + encodedUrl;
+  // 兼容 scheme 跳转的中转链接（外部浏览器用）
+  var payUrl = "https://ds.alipay.com/?scheme=" + encodeURIComponent(alipayScheme);
+
+  var payBtn = document.getElementById("payBtn");
+  var wechatMask = document.getElementById("wechatMask");
+
+  if (isWechat) {
+    // 微信内：显示引导遮罩，禁止直接跳转
+    payBtn.addEventListener("click", function(e) {
+      e.preventDefault();
+      wechatMask.classList.add("show");
+    });
+    // 点击遮罩任意位置关闭
+    wechatMask.addEventListener("click", function() {
+      wechatMask.classList.remove("show");
+    });
+  } else {
+    // 支付宝内或外部浏览器：直接唤起
+    payBtn.href = payUrl;
+    // 页面加载后自动尝试唤起（支付宝内体验更好）
+    if (isAlipay) {
+      window.location.href = alipayScheme;
+    }
+  }
+</script>
+
+</body>
+</html>
